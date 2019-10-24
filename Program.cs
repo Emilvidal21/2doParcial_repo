@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using System.IO;
 
 namespace SegundoParcialL4G
 {
@@ -134,8 +135,7 @@ namespace SegundoParcialL4G
                                         Console.Write(Convert.ToString(t.TerritoryID).PadRight(3));
                                         Console.WriteLine(t.TerritoryDescription.PadRight(16));
                                         Console.WriteLine(Convert.ToString(t.RegionID).PadRight(3));
-                                        //Console.WriteLine(t.Region.RegionDescription.PadRight(3));
-                                        
+                                        //Console.WriteLine(t.Region.RegionDescription                                        
                                     }
 
                                     break;
@@ -229,6 +229,54 @@ namespace SegundoParcialL4G
                             }
 
                         } while (resp != "5");
+
+                        break;
+                    case "5":
+
+                        List<Customer> LCustomer = new List<Customer>();
+                        NorthwindEntities n = new NorthwindEntities();
+                        LCustomer = n.Customers.ToList();
+
+                        string ruta = Properties.Settings.Default.RutaArchivo;
+                        StreamReader reader = new StreamReader(ruta);
+                        string contenido = null;
+                        string[] contenidoTemp = null;
+
+                        contenido = reader.ReadLine();
+
+                        try
+                        {
+                            while (contenido != null)
+                            {
+                                bool comp = false;
+                                contenidoTemp = contenido.Split(',');
+
+                                foreach (Customer c in LCustomer)
+                                {
+                                   
+                                    if (c.CustomerID == contenidoTemp[0])
+                                    {
+                                        var resultado = n.Customers.Where(a => a.CustomerID == c.CustomerID).Select(x => x).FirstOrDefault();
+                                        resultado.CompanyName = contenidoTemp[1];
+                                        comp = true;
+                                    }
+                                    
+                                }
+                                if (comp == false)
+                                {
+                                    n.Customers.Add(new Customer { CustomerID = contenidoTemp[0], CompanyName = contenidoTemp[1] });
+                                }
+                                n.SaveChanges();
+
+                            }
+                        }
+                        catch (Exception)
+                        {
+                            Console.WriteLine("Los clientes no pudieron ser agregados");
+                        }
+
+                        reader.Close();
+
 
                         break;
 
