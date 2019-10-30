@@ -252,7 +252,7 @@ namespace SegundoParcialL4G
                         NorthwindEntities n = new NorthwindEntities();
                         LCustomer = n.Customers.ToList();
 
-                        string ruta = Properties.Settings.Default.RutaArchivo;
+                        string ruta = Properties.Settings.Default.RutaArchivoIC;
                         StreamReader reader = new StreamReader(ruta);
                         string contenido = null;
                         string[] contenidoTemp = null;
@@ -261,7 +261,7 @@ namespace SegundoParcialL4G
 
                         try
                         {
-                            while (contenido != null)
+                            if (contenido != null)
                             {
                                 bool comp = false;
                                 contenidoTemp = contenido.Split(',');
@@ -269,29 +269,113 @@ namespace SegundoParcialL4G
                                 foreach (Customer c in LCustomer)
                                 {
                                    
-                                    if (c.CustomerID == contenidoTemp[0])
+                                    if (contenidoTemp[0].PadRight(5) == c.CustomerID)
                                     {
-                                        var resultado = n.Customers.Where(a => a.CustomerID == c.CustomerID).Select(x => x).FirstOrDefault();
-                                        resultado.CompanyName = contenidoTemp[1];
-                                        comp = true;
+                                        try
+                                        {
+                                            var resultado = n.Customers.Where(a => a.CustomerID == c.CustomerID).Select(x => x).FirstOrDefault();
+                                            resultado.CompanyName = contenidoTemp[1];
+                                            comp = true;
+                                            n.SaveChanges();
+                                            Console.WriteLine("El cliente fue actualizado");
+                                            Console.ReadLine();
+                                        }
+                                        catch
+                                        {
+                                            Console.WriteLine("No se pudo actualizar el cliente");
+                                            Console.ReadLine();
+                                        }
                                     }
                                     
                                 }
                                 if (comp == false)
                                 {
-                                    n.Customers.Add(new Customer { CustomerID = contenidoTemp[0], CompanyName = contenidoTemp[1] });
+                                    try
+                                    {
+                                        n.Customers.Add(new Customer { CustomerID = contenidoTemp[0], CompanyName = contenidoTemp[1] });
+                                        n.SaveChanges();
+                                        Console.WriteLine("El cliente fue agregado");
+                                        Console.ReadLine();
+                                    }
+                                    catch
+                                    {
+                                        Console.WriteLine("No se pudo agregar el cliente");
+                                        Console.ReadLine();
+                                    }
                                 }
-                                n.SaveChanges();
+                                
 
                             }
                         }
                         catch (Exception)
                         {
-                            Console.WriteLine("Los clientes no pudieron ser agregados");
+                            Console.WriteLine("No se pudo ejecutar la accion");
                             Console.ReadLine();
-                        }                        
+                        }
+
                         reader.Close();
 
+
+                        break;
+
+                    case "6":
+
+
+                        int orderID;
+                        StreamWriter fct = new StreamWriter(Properties.Settings.Default.RutaArchivoF);
+                        List<Order_Detail> LDetalle = new List<Order_Detail>();
+                        decimal Total = 0;
+
+                        using (NorthwindEntities nf = new NorthwindEntities())
+                        {
+                            Console.WriteLine("Ingrese el codigo de la factura que desee exportar:");
+                            orderID = Convert.ToInt32(Console.ReadLine());
+                            var fact = nf.Orders.Where(a => a.OrderID == orderID).Select(x => x).FirstOrDefault();
+                            var cliente = nf.Customers.Where(a => a.CustomerID == fact.CustomerID).Select(x => x).FirstOrDefault();
+
+                            decimal Cargo = 0;
+
+
+                            fct.WriteLine("Factura No." + fact.OrderID);
+                            fct.WriteLine("Fecha de factura: " + fact.OrderDate);
+                            fct.WriteLine("Nombre Cliente:" + cliente.CompanyName);
+
+                            LDetalle = nf.Order_Details.ToList();
+
+                            fct.Write("Producto".PadRight(41));
+                            fct.Write("Precio".PadRight(10));
+                            fct.Write("Cantidad".PadRight(10));
+                            fct.Write("Descuento".PadRight(10));
+                            fct.WriteLine("Cargo".PadRight(10));
+
+                            foreach (Order_Detail od in LDetalle)
+                            {
+                                if (od.OrderID == fact.OrderID)
+                                {
+                                    var producto = nf.Products.Where(a => a.ProductID == od.ProductID).Select(x => x).FirstOrDefault();
+                                    
+                                    fct.Write(producto.ProductName.PadRight(41));
+                                    fct.Write(Convert.ToString(od.UnitPrice).PadRight(10));
+                                    fct.Write(Convert.ToString(od.Quantity).PadRight(10));
+                                    fct.Write(Convert.ToString(od.Discount).PadRight(10));
+                                    
+                                    Cargo = (od.UnitPrice * od.Quantity) - ((od.UnitPrice * od.Quantity) * Convert.ToDecimal(od.Discount));
+
+                                    fct.WriteLine(Convert.ToString(Cargo).PadRight(10));
+
+                                    Total = Total + Cargo;
+                                }
+                            }
+
+                            fct.WriteLine("Total: " + Total);
+
+
+                        }
+
+                        fct.Close();
+
+                        Console.WriteLine("La factura ha sido exportada");
+                        Console.ReadLine();
 
                         break;
 

@@ -25,13 +25,25 @@ namespace SegundoParcialL4G.Properties {
         
         [global::System.Configuration.UserScopedSettingAttribute()]
         [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
-        [global::System.Configuration.DefaultSettingValueAttribute("C:\\InfoCliente.txt")]
-        public string RutaArchivo {
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\\\Users\\\\PC 1\\\\source\\\\repos\\\\InfoCliente.txt")]
+        public string RutaArchivoIC {
             get {
-                return ((string)(this["RutaArchivo"]));
+                return ((string)(this["RutaArchivoIC"]));
             }
             set {
-                this["RutaArchivo"] = value;
+                this["RutaArchivoIC"] = value;
+            }
+        }
+        
+        [global::System.Configuration.UserScopedSettingAttribute()]
+        [global::System.Diagnostics.DebuggerNonUserCodeAttribute()]
+        [global::System.Configuration.DefaultSettingValueAttribute("C:\\\\Users\\\\PC 1\\\\source\\\\repos\\\\Factura.txt")]
+        public string RutaArchivoF {
+            get {
+                return ((string)(this["RutaArchivoF"]));
+            }
+            set {
+                this["RutaArchivoF"] = value;
             }
         }
     }
