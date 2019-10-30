@@ -38,12 +38,15 @@ namespace SegundoParcialL4G
                     n.Categories.Add(categoria);
                     n.SaveChanges();
                     Console.WriteLine("La categoria ha sido agregada");
+                    Console.ReadLine();
+
                 }
                 return true;
             }
             catch (Exception)
             {
                 Console.WriteLine("No se pudo ejecutar la accion");
+                Console.ReadLine();
                 return false;
             }
         }
@@ -52,7 +55,16 @@ namespace SegundoParcialL4G
         {
 
             Console.WriteLine("Digite el ID:");
-            categoria.CategoryID = Convert.ToInt32(Console.ReadLine());
+            try
+            {
+                categoria.CategoryID = Convert.ToInt32(Console.ReadLine());
+            }
+            catch
+            {
+                Console.WriteLine("Valor invalido");
+                Console.ReadLine();
+                return false;
+            }
             Console.WriteLine("Digite el nuevo nombre:");
             categoria.CategoryName = Console.ReadLine();
             Console.WriteLine("Digite la nueva descripcion:");
@@ -67,6 +79,7 @@ namespace SegundoParcialL4G
                     resultado.Description = categoria.Description;
                     n.SaveChanges();
                     Console.WriteLine("La categoria ha sido actualizada");
+                    Console.ReadLine();
 
                 }
                 return true;
@@ -74,6 +87,7 @@ namespace SegundoParcialL4G
             catch (Exception)
             {
                 Console.WriteLine("No se pudo ejecutar la accion");
+                Console.ReadLine();
                 return false;
             }
 
@@ -83,7 +97,16 @@ namespace SegundoParcialL4G
         {
 
             Console.WriteLine("Digite el ID:");
-            categoria.CategoryID = Convert.ToInt32(Console.ReadLine());
+            try
+            {
+                categoria.CategoryID = Convert.ToInt32(Console.ReadLine());
+            }
+            catch
+            {
+                Console.WriteLine("Valor invalido");
+                Console.ReadLine();
+                return false;
+            }
 
             try
             {
@@ -93,6 +116,7 @@ namespace SegundoParcialL4G
                     n.Categories.Remove(resultado);
                     n.SaveChanges();
                     Console.WriteLine("La categoria ha sido eliminada");
+                    Console.ReadLine();
 
                 }
                 return true;
@@ -100,6 +124,7 @@ namespace SegundoParcialL4G
             catch (Exception)
             {
                 Console.WriteLine("No se pudo ejecutar la accion");
+                Console.ReadLine();
                 return false;
             }
 

@@ -31,7 +31,16 @@ namespace SegundoParcialL4G
                 Console.WriteLine("Digite la descripcion:");
                 territory.TerritoryDescription = Console.ReadLine();
                 Console.WriteLine("Digite el ID de region:");
-                territory.RegionID = Convert.ToInt32(Console.ReadLine());
+                try
+                {
+                    territory.RegionID = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Valor invalido");
+                    Console.ReadLine();
+                    return false;
+                }
 
                 try
                 {
@@ -40,12 +49,14 @@ namespace SegundoParcialL4G
                         n.Territories.Add(territory);
                         n.SaveChanges();
                         Console.WriteLine("El territorio ha sido agregado");
+                        Console.ReadLine();
                     }
                     return true;
                 }
                 catch (Exception)
                 {
-                    Console.WriteLine("No se pudo ejecutar la accion");
+                    Console.WriteLine("No se pudo ejecutar la accion");                
+                    Console.ReadLine();
                     return false;
                 }
             }
@@ -58,10 +69,19 @@ namespace SegundoParcialL4G
                 Console.WriteLine("Digite la nueva descripcion:");
                 territory.TerritoryDescription = Console.ReadLine();
                 Console.WriteLine("Digite el nuevo ID de region:");
-                territory.RegionID = Convert.ToInt32(Console.ReadLine());
+                try
+                {
+                    territory.RegionID = Convert.ToInt32(Console.ReadLine());
+                }
+                catch (Exception)
+                {
+                    Console.WriteLine("Valor invalido");
+                    Console.ReadLine();
+                    return false;
+                }
 
-            try
-            {
+                try
+                {
                     using (NorthwindEntities n = new NorthwindEntities())
                     {
                         var resultado = n.Territories.Where(a => a.TerritoryID == territory.TerritoryID).Select(x => x).FirstOrDefault();
@@ -69,15 +89,18 @@ namespace SegundoParcialL4G
                         resultado.RegionID = territory.RegionID;
                         n.SaveChanges();
                         Console.WriteLine("El territorio ha sido actualizado");
+                        Console.ReadLine();
 
                     }
                     return true;
                 }
+
                 catch (Exception)
-                {
+                    {
                     Console.WriteLine("No se pudo ejecutar la accion");
+                    Console.ReadLine();
                     return false;
-                }
+                    }
 
             }
 
@@ -95,6 +118,7 @@ namespace SegundoParcialL4G
                         n.Territories.Remove(resultado);
                         n.SaveChanges();
                         Console.WriteLine("El territorio ha sido eliminado");
+                        Console.ReadLine();
 
                     }
                     return true;
@@ -102,6 +126,7 @@ namespace SegundoParcialL4G
                 catch (Exception)
                 {
                     Console.WriteLine("No se pudo ejecutar la accion");
+                    Console.ReadLine();
                     return false;
                 }
 

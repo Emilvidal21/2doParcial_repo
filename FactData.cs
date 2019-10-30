@@ -8,28 +8,42 @@ namespace SegundoParcialL4G
 {
     class FactData
     {
-        public void Insertar(Order order, Order_Detail detail,string resp)
+        public bool Insertar(Order order, string resp)
         {
                       
 
             using (NorthwindEntities n = new NorthwindEntities())
             { 
                 Console.WriteLine("Digite el ID de cliente:");
-                order.CustomerID = Console.ReadLine();
+                try
+                {
+                    order.CustomerID = Console.ReadLine();
+                }
+                catch
+                {
+                    Console.WriteLine("Valor invalido");
+                    Console.ReadLine();
+                    return false;
+                }
+                
                 order.OrderDate = DateTime.Now;
-                n.Orders.Add(order);
+                
 
                 try
                 {                    
                     n.Orders.Add(order);
-                    n.SaveChanges();                   
+                    n.SaveChanges();
+                    InsertarD(order, resp);
+                    
                 }
                     catch (Exception)
                 {
-                    Console.WriteLine("No se pudo ejecutar la accion");                  
+                    Console.WriteLine("No se pudo ejecutar la accion");
+                    return false;
                 }
+               
+                return true;
 
-                InsertarD(order, detail, resp);
             }
 
      
@@ -40,20 +54,46 @@ namespace SegundoParcialL4G
 
         }
 
-        public void InsertarD(Order order,Order_Detail detail, string resp)
+        public bool InsertarD(Order order, string resp)
         {
-            do 
+            Order_Detail detail = new Order_Detail();
+            do
             {
                 using (NorthwindEntities no = new NorthwindEntities())
                 {
-
+                    
                     detail.OrderID = order.OrderID;
                     Console.WriteLine("Digite el ID del producto:");
                     detail.ProductID = Convert.ToInt32(Console.ReadLine());
-                    var product = no.Products.Where(a => a.ProductID == detail.ProductID).Select(x => x).FirstOrDefault();
-                    detail.UnitPrice = Convert.ToDecimal(product.UnitPrice);
-                    Console.WriteLine("Digite el la cantidad del producto:");
-                    detail.Quantity = Convert.ToInt16(Console.ReadLine());
+                    try
+                    {
+                        detail.ProductID = Convert.ToInt32(Console.ReadLine());
+                    }
+                    catch
+                    {
+                        Console.WriteLine("Valor invalido");
+                        Console.ReadLine();
+                        return false;
+                    }
+                    detail.Product = no.Products.Where(a => a.ProductID == detail.ProductID).Select(x => x).FirstOrDefault();
+                    detail.UnitPrice = Convert.ToDecimal(detail.Product.UnitPrice);
+                    
+                    do
+                    {
+                        try
+                        {
+                            resp = "1";
+                            Console.WriteLine("Digite el la cantidad del producto:");
+                            detail.Quantity = Convert.ToInt16(Console.ReadLine());
+                        }
+                        catch
+                        {
+                            Console.WriteLine("Valor Invalido");
+                            resp = "0";
+                        }                      
+
+                    } while (resp == "0");
+
                     Console.WriteLine("¿Hay descuento?:");
                     if (Console.ReadLine() == "si")
                     {
@@ -61,14 +101,23 @@ namespace SegundoParcialL4G
                         {
                             try
                             {
+                                resp = "1";
                                 Console.WriteLine("¿Cuanto es el descuento?");
-                                detail.Discount = Convert.ToInt64(Console.ReadLine());
+                                detail.Discount = float.Parse(Console.ReadLine());
                             }
                             catch
                             {
                                 Console.WriteLine("Valor Invalido");
+                                resp = "0";
                             }
-                        } while (detail.Discount == 0);
+
+                            if (detail.Discount >= 1)
+                            {
+                                Console.WriteLine("Valor Invalido");
+                                resp = "0";
+                            }
+
+                        } while (resp == "0");
                     }
                     else
                     {
@@ -88,6 +137,7 @@ namespace SegundoParcialL4G
                     {
                         Console.WriteLine("No se pudo ejecutar la accion");
                     }
+
                     do
                     {
                         Console.WriteLine("¿Desea agregar otro producto?");
@@ -101,6 +151,7 @@ namespace SegundoParcialL4G
                 }
 
             } while (resp != "no");
+            return true;
         }
     }
 }

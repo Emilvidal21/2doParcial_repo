@@ -34,13 +34,41 @@ namespace SegundoParcialL4G
             Console.WriteLine("Digite el nombre:");
             product.ProductName = Console.ReadLine();
             Console.WriteLine("Digite la categoria:");
-            product.CategoryID = Convert.ToInt32(Console.ReadLine());
-            //product.Category = 
-            //product.CategoryID =  Console.ReadLine();
+            try
+            {
+                product.CategoryID = Convert.ToInt32(Console.ReadLine());
+            }
+            catch
+            {
+                Console.WriteLine("Valor invalido");
+                Console.ReadLine();
+                return false;
+            }
+
             Console.WriteLine("Digite la cantidad por unidad del producto:");
-            product.QuantityPerUnit = Console.ReadLine();
+            try
+            {
+                product.QuantityPerUnit = Console.ReadLine();
+            }
+            catch
+            {
+                Console.WriteLine("Valor invalido");
+                Console.ReadLine();
+                return false;
+            }
+
             Console.WriteLine("Digite el precio:");
-            product.UnitPrice = Convert.ToDecimal(Console.ReadLine());
+            try
+            {
+                product.UnitPrice = Convert.ToDecimal(Console.ReadLine());
+            }
+            catch
+            {
+                Console.WriteLine("Valor invalido");
+                Console.ReadLine();
+                return false;
+            }
+
             product.Discontinued = false;
 
             try
@@ -57,6 +85,7 @@ namespace SegundoParcialL4G
             catch (Exception)
             {
                 Console.WriteLine("No se pudo ejecutar la accion");
+                Console.ReadLine();
                 return false;
             }
         }
@@ -65,7 +94,18 @@ namespace SegundoParcialL4G
         {
 
             Console.WriteLine("Digite el ID:");
-            product.ProductID = Convert.ToInt32(Console.ReadLine());
+            
+            try
+            {
+                product.ProductID = Convert.ToInt32(Console.ReadLine());
+            }
+            catch
+            {
+                Console.WriteLine("Valor invalido");
+                Console.ReadLine();
+                return false;
+            }
+
             NorthwindEntities n = new NorthwindEntities();
             var resultado = n.Products.Where(a => a.ProductID == product.ProductID).Select(x => x).FirstOrDefault();
             product.Discontinued = resultado.Discontinued;
@@ -92,12 +132,41 @@ namespace SegundoParcialL4G
             {
                 Console.WriteLine("Digite el nuevo nombre:");
                 product.ProductName = Console.ReadLine();
-                Console.WriteLine("Digite la categoria:");
-                product.CategoryID = Convert.ToInt32(Console.ReadLine());
-                Console.WriteLine("Digite la nueva cantidad de producto por unidad:");
-                product.QuantityPerUnit = Console.ReadLine();
+                Console.WriteLine("Digite la nueva categoria:");
+                try
+                {
+                    product.CategoryID = Convert.ToInt32(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("Valor invalido");
+                    Console.ReadLine();
+                    return false;
+                }
+
+                Console.WriteLine("Digite la nueva cantidad por unidad del producto:");
+                try
+                {
+                    product.QuantityPerUnit = Console.ReadLine();
+                }
+                catch
+                {
+                    Console.WriteLine("Valor invalido");
+                    Console.ReadLine();
+                    return false;
+                }
+
                 Console.WriteLine("Digite el nuevo precio:");
-                product.UnitPrice = Convert.ToInt32(Console.ReadLine());
+                try
+                {
+                    product.UnitPrice = Convert.ToDecimal(Console.ReadLine());
+                }
+                catch
+                {
+                    Console.WriteLine("Valor invalido");
+                    Console.ReadLine();
+                    return false;
+                }
 
             }
             try
@@ -121,6 +190,7 @@ namespace SegundoParcialL4G
             catch (Exception)
             {
                 Console.WriteLine("No se pudo ejecutar la accion");
+                Console.ReadLine();
                 return false;
             }
 
@@ -130,7 +200,16 @@ namespace SegundoParcialL4G
         {
 
             Console.WriteLine("Digite el ID:");
-            product.ProductID = Convert.ToInt32(Console.ReadLine());
+            try
+            {
+                product.ProductID = Convert.ToInt32(Console.ReadLine());
+            }
+            catch
+            {
+                Console.WriteLine("Valor invalido");
+                Console.ReadLine();
+                return false;
+            }
 
             try
             {
@@ -140,6 +219,7 @@ namespace SegundoParcialL4G
                     n.Products.Remove(resultado);
                     n.SaveChanges();
                     Console.WriteLine("El producto ha sido eliminado");
+                    Console.ReadLine();
 
                 }
                 return true;
@@ -147,6 +227,7 @@ namespace SegundoParcialL4G
             catch (Exception)
             {
                 Console.WriteLine("No se pudo ejecutar la accion");
+                Console.ReadLine();
                 return false;
             }
 

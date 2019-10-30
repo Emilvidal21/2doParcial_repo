@@ -73,6 +73,7 @@ namespace SegundoParcialL4G
                                         Console.Write(Convert.ToString(p.UnitPrice).PadRight(18));
                                         Console.WriteLine(Convert.ToString(p.Discontinued).PadRight(15));
                                     }
+                                    Console.ReadLine();
 
                                     break;
 
@@ -141,7 +142,7 @@ namespace SegundoParcialL4G
                                         Console.Write(t.TerritoryDescription.PadRight(50));
                                         Console.WriteLine(region.RegionDescription.PadRight(11));                             
                                     }
-
+                                    Console.ReadLine();
                                     break;
 
                                 case "2":
@@ -205,7 +206,7 @@ namespace SegundoParcialL4G
                                         Console.Write(c.CategoryName.PadRight(16));
                                         Console.WriteLine(c.Description.PadRight(60));
                                     }
-
+                                    Console.ReadLine();
                                     break;
 
                                 case "2":
@@ -239,10 +240,9 @@ namespace SegundoParcialL4G
                     case "4":
 
                         Order order = new Order();
-                        Order_Detail detail = new Order_Detail();
                         FactData fd = new FactData();
 
-                        fd.Insertar(order, detail, resp);
+                        fd.Insertar(order, resp);
                         
                         break;
 
@@ -254,9 +254,10 @@ namespace SegundoParcialL4G
 
                         string ruta = Properties.Settings.Default.RutaArchivoIC;
                         StreamReader reader = new StreamReader(ruta);
+                        
                         string contenido = null;
                         string[] contenidoTemp = null;
-
+                                                
                         contenido = reader.ReadLine();
 
                         try
@@ -272,19 +273,20 @@ namespace SegundoParcialL4G
                                     if (contenidoTemp[0].PadRight(5) == c.CustomerID)
                                     {
                                         try
-                                        {
+                                        {                                            
                                             var resultado = n.Customers.Where(a => a.CustomerID == c.CustomerID).Select(x => x).FirstOrDefault();
                                             resultado.CompanyName = contenidoTemp[1];
                                             comp = true;
                                             n.SaveChanges();
                                             Console.WriteLine("El cliente fue actualizado");
-                                            Console.ReadLine();
+                                            Console.ReadLine();                                            
                                         }
                                         catch
                                         {
                                             Console.WriteLine("No se pudo actualizar el cliente");
                                             Console.ReadLine();
                                         }
+                                        break;
                                     }
                                     
                                 }
